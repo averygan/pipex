@@ -10,4 +10,23 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "pipex.h"
 
+// Helper function to join path with command
+char	*ft_shellpath(char *command)
+{
+	char	*res;
+
+	res = ft_strjoin("/bin/", command);
+	return (res);
+}
+
+// Print error if errno < 0
+void	ft_error(int error)
+{
+	if (error != 0)
+	{
+		perror(NULL);
+		exit(errno);
+	}
+}
