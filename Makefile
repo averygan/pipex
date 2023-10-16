@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 NAME	= pipex
-SRCS	= srcs/pipex.c srcs/pipex_utils.c
+SRCS	= srcs/pipex.c srcs/utils.c srcs/pipex_split.c srcs/env.c
 OBJS 	= ${SRCS:.c=.o}
 MAIN	= srcs/pipex.c
 CC 		= gcc

@@ -12,67 +12,65 @@
 
 #include "pipex.h"
 
-// TODO
-// Error handling for argument count
-// Error handling for all open and exec
-// Handle memory leaks
+// Call env functions and exec
+void	ft_exec(char **env, char *cmd)
+{
+	char	**allpath;
+	char	**args;
+	char	*path;
 
-void	ft_child(char **argv, int *pipes, char **args, char **env)
+	allpath = ft_getenv(env);
+	args = arr_split(cmd, ' ');
+	path = ft_getpath(allpath, args[0]);
+	if (path)
+		execve(path, args, env);
+	ft_error(0);
+	ft_free(args);
+	exit(127);
+}
+
+void	child(char **argv, int *pipes, char **env)
 {
 	int	fd;
 
-	fd = open(argv[1], O_RDONLY);
-	ft_error(errno);
-	dup2(fd, STDIN_FILENO);
-	ft_error(errno);
-	dup2(pipes[1], STDOUT_FILENO);
-	ft_error(errno);
-	args = ft_split(argv[2], ' ');
-	if (execve(ft_shellpath(args[0]), args, env) < 0)
-		ft_error(errno);
+	close(pipes[0]);
+	fd = ft_openfiles(argv, 0);
+	ft_redirect(&fd, &pipes[1]);
+	close(pipes[1]);
+	ft_exec(env, argv[2]);
+	return ;
 }
 
-void	ft_parent(char **argv, int *pipes, char **args, char **env)
+void	parent(char **argv, int *pipes, char **env)
 {
 	int	outfd;
 
-	dup2(pipes[0], STDIN_FILENO);
-	ft_error(errno);
-	outfd = open(argv[4], O_WRONLY | O_CREAT, 0644);
-	ft_error(errno);
-	dup2(outfd, STDOUT_FILENO);
-	ft_error(errno);
-	args = ft_split(argv[3], ' ');
-	if (execve(ft_shellpath(args[0]), args, env) < 0)
-		ft_error(errno);
+	close(pipes[1]);
+	outfd = ft_openfiles(argv, 1);
+	ft_redirect(&pipes[0], &outfd);
+	close(pipes[0]);
+	ft_exec(env, argv[3]);
+	wait(NULL);
+	return ;
 }
 
 int	main(int argc, char *argv[], char **envp)
 {
-	int		pipes[2];
-	int		pid;
-	char	**args;
+	int	pipes[2];
+	int	pid;
 
-	errno = 0;
-	pid = 0;
-	args = NULL;
-	if (argc != 5)
-		return (1);
-	if (pipe(pipes) < 0)
-		ft_error(errno);
-	pid = fork();
-	if (pid < 0)
-		ft_error(errno);
-	if (pid == 0)
+	if (argc == 5)
 	{
-		close(pipes[0]);
-		ft_child(argv, pipes, args, envp);
-		close(pipes[1]);
-		return (0);
+		if (pipe(pipes) < 0)
+			ft_error(1);
+		pid = fork();
+		if (pid < 0)
+			ft_error(2);
+		if (!pid)
+			child(argv, pipes, envp);
+		parent(argv, pipes, envp);
 	}
-	close(pipes[1]);
-	ft_parent(argv, pipes, args, envp);
-	close(pipes[0]);
-	wait(NULL);
-	return (0);
+	else
+		ft_error(3);
+	return (1);
 }

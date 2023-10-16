@@ -22,7 +22,19 @@
 # include <sys/wait.h>
 # include "../libft/libft.h"
 
-char	*ft_shellpath(char *command);
-void	ft_error(int error);
+/* utils */
+void	ft_error(int num);
+void	ft_redirect(int *in, int *out);
+int		ft_openfiles(char **argv, int num);
+
+/* env functions */
+void	ft_free(char **s);
+char	*ft_getpath(char **allpath, char *cmd);
+char	**ft_getenv(char **env);
+
+/* split functions */
+int		token_count(char *s, char c);
+char	**arr_split(char *s, char c);
+char	**alloc_words(char **words, char *s, char c, int wordcount);
 
 #endif
