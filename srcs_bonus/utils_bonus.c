@@ -36,7 +36,8 @@ void	ft_exec(char **env, char *cmd)
 	exit(127);
 }
 
-// Error handling for command not found, pipe, fork, redirection and invalid args error
+// Error handling for:
+// Command not found, pipe, fork, redirection and invalid args error
 void	ft_error(int num)
 {
 	if (num == 0)

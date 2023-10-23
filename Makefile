@@ -35,6 +35,7 @@ ${LIBFT_BUILD}:
 clean:
 	@make -s clean -C ./libft
 	@rm -f ${OBJS}
+	@rm -f ${OBJS_BONUS}
 
 fclean: clean
 	@make -s fclean -C ./libft
