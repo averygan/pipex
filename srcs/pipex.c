@@ -29,7 +29,8 @@ void	ft_exec(char **env, char *cmd)
 	exit(127);
 }
 
-void	child(char **argv, int *pipes, char **env)
+// Pipe handling and calls redirect function for child process, exec cmd
+void	child_process(char **argv, int *pipes, char **env)
 {
 	int	fd;
 
@@ -41,7 +42,8 @@ void	child(char **argv, int *pipes, char **env)
 	return ;
 }
 
-void	parent(char **argv, int *pipes, char **env)
+// Pipe handling and calls redirect function for parent process, exec cmd
+void	parent_process(char **argv, int *pipes, char **env)
 {
 	int	outfd;
 
@@ -67,8 +69,9 @@ int	main(int argc, char *argv[], char **envp)
 		if (pid < 0)
 			ft_error(2);
 		if (!pid)
-			child(argv, pipes, envp);
-		parent(argv, pipes, envp);
+			child_process(argv, pipes, envp);
+		else
+			parent_process(argv, pipes, envp);
 	}
 	else
 		ft_error(3);

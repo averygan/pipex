@@ -12,25 +12,41 @@
 
 #include "pipex.h"
 
-// Error handling
+// Error handling for command not found, pipe, fork and invalid args
 void	ft_error(int num)
 {
 	if (num == 0)
-		perror("pipex: command not found");
+	{
+		ft_putstr_fd("pipex: command not found\n", 2);
+		exit(127);
+	}
 	if (num == 1)
-		perror("error: unable to pipe");
+	{
+		ft_putstr_fd("error: unable to pipe\n", 2);
+		exit(126);
+	}
 	if (num == 2)
-		perror("error: unable to fork");
+	{
+		ft_putstr_fd("error: unable to fork\n", 2);
+		exit(127);
+	}
 	if (num == 3)
 		ft_putstr_fd("invalid argument: ./pipex file1 cmd1 cmd2 file2\n", 2);
 }
 
+// Function to handle redirection and erorr handling
 void	ft_redirect(int *in, int *out)
 {
 	if (dup2(*in, STDIN_FILENO) < 0)
-		perror(NULL);
+	{
+		ft_putstr_fd("error: dup2\n", 2);
+		exit(9);
+	}
 	if (dup2(*out, STDOUT_FILENO) < 0)
-		perror(NULL);
+	{
+		ft_putstr_fd("error: dup2\n", 2);
+		exit(9);
+	}
 }
 
 // Open files and check for errors

@@ -11,9 +11,11 @@
 # **************************************************************************** #
 
 NAME	= pipex
-SRCS	= srcs/pipex.c srcs/utils.c srcs/pipex_split.c srcs/env.c
+SRCS	= srcs/pipex.c srcs/utils.c srcs/split.c srcs/env.c
+SRCS_BONUS = srcs_bonus/pipex_bonus.c srcs_bonus/utils_bonus.c srcs_bonus/split_bonus.c \
+				srcs_bonus/env_bonus.c srcs_bonus/get_next_line_bonus.c
 OBJS 	= ${SRCS:.c=.o}
-MAIN	= srcs/pipex.c
+OBJS_BONUS = ${SRCS_BONUS:.c=.o}
 CC 		= gcc
 CFLAGS 	= -Wall -Wextra -Werror
 LIBFT_BUILD := ./libft/libft.a
@@ -24,16 +26,23 @@ ${NAME} : ${OBJS} ${LIBFT_BUILD}
 	@$(CC) ${CFLAGS} ${OBJS} -Llibft -lft -o ${NAME}
 	@echo "Pipex Compiled!"
 
+.c.o:
+	@$(CC) ${CFLAGS} -c $< -o $@
+
 ${LIBFT_BUILD}:
-	@make -C ./libft
+	@make -s -C ./libft
 
 clean:
-	@make clean -C ./libft
+	@make -s clean -C ./libft
 	@rm -f ${OBJS}
 
 fclean: clean
-	@make fclean -C ./libft
+	@make -s fclean -C ./libft
 	@rm -f ${NAME}
 	@echo "fclean Completed!"
 
 re: fclean all
+
+bonus:	${OBJS_BONUS} ${LIBFT_BUILD}
+	@$(CC) ${CFLAGS} ${OBJS_BONUS} -Llibft -lft -o ${NAME}
+	@echo "Pipex Bonus Compiled!"

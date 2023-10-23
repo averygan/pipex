@@ -33,18 +33,19 @@ CFLAGS = -Wall -Wextra -Werror
 all: ${NAME} bonus
 
 .c.o:
-	${CC} ${CFLAGS} -c $< -o $@
+	@${CC} ${CFLAGS} -c $< -o $@
+	@echo "$< compiled"
 
 ${NAME}: ${OBJS}
-	${LIBC} ${NAME} ${OBJS}
+	@${LIBC} ${NAME} ${OBJS}
 
 clean: 
-	${RM} ${OBJS} ${BONUS}
+	@${RM} ${OBJS} ${BONUS}
 
 fclean: clean
-	${RM} ${NAME}
+	@${RM} ${NAME}
 
 re: fclean all
 
 bonus:	${NAME} ${BONUS}
-		${LIBC} ${NAME} ${BONUS}
+		@${LIBC} ${NAME} ${BONUS}
