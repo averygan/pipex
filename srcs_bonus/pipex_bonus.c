@@ -22,10 +22,10 @@ void	pipe_handler(char *cmd, char **env)
 	int	pid;
 
 	if (pipe(pipes) < 0)
-		ft_error(1);
+		ft_error(1, NULL);
 	pid = fork();
 	if (pid < 0)
-		ft_error(2);
+		ft_error(2, NULL);
 	if (!pid)
 	{
 		close(pipes[0]);
@@ -72,10 +72,10 @@ void	here_doc(char *limiter)
 	int	pid;
 
 	if (pipe(pipes) < 0)
-		ft_error(1);
+		ft_error(1, NULL);
 	pid = fork();
 	if (pid < 0)
-		ft_error(2);
+		ft_error(2, NULL);
 	if (!pid)
 	{
 		close(pipes[0]);
@@ -118,13 +118,13 @@ int	main(int argc, char *argv[], char **envp)
 		{
 			i = 2;
 			ft_openfiles(&infile, &outfile, argc, argv);
-			dup2(infile, STDIN_FILENO);
+			ft_dup(infile, STDIN_FILENO);
 		}
 		while (i < argc - 2)
 			pipe_handler(argv[i++], envp);
 		parent_handler(outfile, envp, argv, i);
 	}
 	else
-		ft_error(4);
+		ft_error(4, NULL);
 	return (0);
 }

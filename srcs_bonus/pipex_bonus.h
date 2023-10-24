@@ -28,7 +28,7 @@
 
 /* utils functions */
 int		ft_openfiles(int *infile, int *outfile, int argc, char **argv);
-void	ft_error(int num);
+void	ft_error(int num, char *cmd);
 int		open_heredoc(int *outfile, char *filename);
 void	ft_exec(char **env, char *cmd);
 void	ft_dup(int to, int from);
@@ -41,7 +41,7 @@ char	**ft_getenv(char **env);
 /* split functions */
 int		token_count(char *s, char c);
 char	**arr_split(char *s, char c);
-char	**alloc_words(char **words, char *s, char c);
+void	alloc_words(char **words, char *s, char c);
 
 /* get next line and here_doc functions */
 char	*get_next_line(int fd);

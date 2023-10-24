@@ -16,7 +16,7 @@
 void	ft_dup(int to, int from)
 {
 	if (dup2(to, from) < 0)
-		ft_error(3);
+		ft_error(3, NULL);
 }
 
 // Call env functions and exec
@@ -31,24 +31,26 @@ void	ft_exec(char **env, char *cmd)
 	path = ft_getpath(allpath, args[0]);
 	if (path)
 		execve(path, args, env);
-	ft_error(0);
+	ft_error(0, cmd);
 	ft_free(args);
 	exit(127);
 }
 
 // Error handling for:
 // Command not found, pipe, fork, redirection and invalid args error
-void	ft_error(int num)
+void	ft_error(int num, char *cmd)
 {
 	if (num == 0)
 	{
-		ft_putstr_fd("pipex: command not found\n", 2);
+		ft_putstr_fd("pipex: line 1: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": command not found\n", 2);
 		exit(127);
 	}
 	if (num == 1)
 	{
 		ft_putstr_fd("error: unable to pipe\n", 2);
-		exit(126);
+		exit(127);
 	}
 	if (num == 2)
 	{
@@ -70,13 +72,17 @@ int	ft_openfiles(int *infile, int *outfile, int argc, char **argv)
 	*infile = open(argv[1], O_RDONLY);
 	if (*infile < 0)
 	{
-		ft_putstr_fd("error: unable to open file", 2);
+		ft_putstr_fd("pipex: line 1: ", 2);
+		ft_putstr_fd(argv[1], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		exit(errno);
 	}
 	*outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (*outfile < 0)
 	{
-		ft_putstr_fd("error: unable to open file", 2);
+		ft_putstr_fd("pipex: line 1: ", 2);
+		ft_putstr_fd(argv[argc - 1], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		exit(errno);
 	}
 	return (0);
@@ -88,7 +94,9 @@ int	open_heredoc(int *outfile, char *filename)
 	*outfile = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (*outfile < 0)
 	{
-		ft_putstr_fd("error: unable to open file", 2);
+		ft_putstr_fd("pipex: line 1: ", 2);
+		ft_putstr_fd(filename, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		exit(errno);
 	}
 	return (0);

@@ -23,7 +23,7 @@
 # include "../libft/libft.h"
 
 /* utils */
-void	ft_error(int num);
+void	ft_error(int num, char *cmd);
 void	ft_redirect(int *in, int *out);
 int		ft_openfiles(char **argv, int num);
 
@@ -35,6 +35,6 @@ char	**ft_getenv(char **env);
 /* split functions */
 int		token_count(char *s, char c);
 char	**arr_split(char *s, char c);
-char	**alloc_words(char **words, char *s, char c);
+void	alloc_words(char **words, char *s, char c);
 
 #endif

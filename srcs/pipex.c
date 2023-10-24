@@ -24,7 +24,7 @@ void	ft_exec(char **env, char *cmd)
 	path = ft_getpath(allpath, args[0]);
 	if (path)
 		execve(path, args, env);
-	ft_error(0);
+	ft_error(0, cmd);
 	ft_free(args);
 	exit(127);
 }
@@ -64,16 +64,16 @@ int	main(int argc, char *argv[], char **envp)
 	if (argc == 5)
 	{
 		if (pipe(pipes) < 0)
-			ft_error(1);
+			ft_error(1, NULL);
 		pid = fork();
 		if (pid < 0)
-			ft_error(2);
+			ft_error(2, NULL);
 		if (!pid)
 			child_process(argv, pipes, envp);
 		else
 			parent_process(argv, pipes, envp);
 	}
 	else
-		ft_error(3);
+		ft_error(3, NULL);
 	return (1);
 }

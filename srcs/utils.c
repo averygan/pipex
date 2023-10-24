@@ -13,11 +13,13 @@
 #include "pipex.h"
 
 // Error handling for command not found, pipe, fork and invalid args
-void	ft_error(int num)
+void	ft_error(int num, char *cmd)
 {
 	if (num == 0)
 	{
-		ft_putstr_fd("pipex: command not found\n", 2);
+		ft_putstr_fd("pipex: line 1: ", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": command not found\n", 2);
 		exit(127);
 	}
 	if (num == 1)
@@ -60,7 +62,7 @@ int	ft_openfiles(char **argv, int num)
 		fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 	{
-		ft_putstr_fd("error: unable to open file", 2);
+		ft_putstr_fd("pipex: line 1: input: No such file or directory\n", 2);
 		exit(errno);
 	}
 	return (fd);

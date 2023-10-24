@@ -38,17 +38,17 @@ int	token_count(char *s, char c)
 	return (token_count);
 }
 
-char	**alloc_words(char **words, char *s, char c)
+void	alloc_words(char **words, char *s, char c)
 {
 	int 	count;
 	char	*quote_end;
 	int	i;
 	int	j;
 
-	i = 0;
+	i = -1;
 	j = 0;
 	count = 0;
-	while (s[i])
+	while (s[++i])
 	{
 		if (s[i] == '\'' || s[i] == '\"')
 		{
@@ -64,9 +64,7 @@ char	**alloc_words(char **words, char *s, char c)
 			words[j++] = ft_substr(s, i - count + 1, count);
 			count = 0;
 		}
-		i++;
 	}
-	return (words);
 }
 
 char	**arr_split(char *s, char c)
@@ -79,7 +77,8 @@ char	**arr_split(char *s, char c)
 	if (!words)
 		return (NULL);
 	words[word_count] = NULL;
-	if (alloc_words(words, s, c))
+	alloc_words(words, s, c);
+	if (words)
 		return (words);
 	else
 		return (NULL);
