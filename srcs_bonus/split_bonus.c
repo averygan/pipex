@@ -15,49 +15,56 @@
 int	token_count(char *s, char c)
 {
 	int	token_count;
-	int	flag;
+	char	*quote_end;
 	int	i;
 
 	token_count = 0;
-	flag = 0;
 	i = 0;
 	while (s[i])
 	{
-		if ((s[i] == '\'' || s[i] == '"') && !flag)
-			flag = !flag;
-		else if ((s[i] == '\'' || s[i] == '"') && flag)
-			flag = 0;
-		if (s[i] != c && (s[i + 1] == '\0' || s[i + 1] == ' ') && !flag)
+		if (s[i] == '\'' || s[i] == '\"')
+		{
+			quote_end = ft_strrchr(&s[i], s[i]);
+			if (quote_end)
+			{
+				i = s - quote_end;
+				token_count++;
+			}
+		}
+		else if (s[i] != c && (s[i + 1] == '\0' || s[i + 1] == ' '))
 			token_count++;
 		i++;
 	}
 	return (token_count);
 }
 
-char	**alloc_words(char **words, char *s, char c, int word_count)
+char	**alloc_words(char **words, char *s, char c)
 {
-	int	letters_count;
+	int 	count;
+	char	*quote_end;
 	int	i;
 	int	j;
 
 	i = 0;
-	j = -1;
-	while (++j < word_count)
+	j = 0;
+	count = 0;
+	while (s[i])
 	{
-		letters_count = 0;
-		c = ' ';
-		while (s[i] && s[i] == c)
-			i++;
-		while (s[i] && s[i] != c)
+		if (s[i] == '\'' || s[i] == '\"')
 		{
-			if (s[i] == '\'' || s[i] == '"')
-				c = s[i++];
-			i++;
-			letters_count++;
+			quote_end = ft_strrchr(&s[i], s[i]);
+			words[j++] = ft_substr(&s[i], 1, quote_end - &s[i] - 1);
+			i = quote_end - s;
 		}
-		words[j] = ft_substr(s, i - letters_count, letters_count);
-		if (s[i] && (s[i] == '\'' || s[i] == '"'))
-			i++;
+		else if (s[i] != c && s[i + 1] != c && s[i + 1] != '\0')
+			count++;
+		else if (s[i] != c && (s[i + 1] == '\0' || s[i + 1] == c))
+		{
+			count++;
+			words[j++] = ft_substr(s, i - count + 1, count);
+			count = 0;
+		}
+		i++;
 	}
 	return (words);
 }
@@ -72,7 +79,7 @@ char	**arr_split(char *s, char c)
 	if (!words)
 		return (NULL);
 	words[word_count] = NULL;
-	if (alloc_words(words, s, c, word_count))
+	if (alloc_words(words, s, c))
 		return (words);
 	else
 		return (NULL);

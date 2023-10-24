@@ -35,6 +35,6 @@ char	**ft_getenv(char **env);
 /* split functions */
 int		token_count(char *s, char c);
 char	**arr_split(char *s, char c);
-char	**alloc_words(char **words, char *s, char c, int wordcount);
+char	**alloc_words(char **words, char *s, char c);
 
 #endif
