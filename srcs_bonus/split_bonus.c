@@ -14,9 +14,9 @@
 
 int	token_count(char *s, char c)
 {
-	int	token_count;
+	int		token_count;
 	char	*quote_end;
-	int	i;
+	int		i;
 
 	token_count = 0;
 	i = 0;
@@ -40,10 +40,10 @@ int	token_count(char *s, char c)
 
 void	alloc_words(char **words, char *s, char c)
 {
-	int 	count;
+	int		count;
 	char	*quote_end;
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 
 	i = -1;
 	j = 0;

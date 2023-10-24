@@ -28,10 +28,8 @@
 
 /* utils functions */
 int		ft_openfiles(int *infile, int *outfile, int argc, char **argv);
-void	ft_error(int num, char *cmd);
 int		open_heredoc(int *outfile, char *filename);
 void	ft_exec(char **env, char *cmd);
-void	ft_dup(int to, int from);
 
 /* env functions */
 void	ft_free(char **s);
@@ -50,5 +48,9 @@ char	*ft_clean(char *buf);
 char	*ft_read(int fd, char *res);
 char	*ft_next(char *buf);
 void	here_doc(char *limiter);
+
+/* error handling functions */
+void	ft_error(int num, char *cmd);
+void	ft_dup(int to, int from);
 
 #endif

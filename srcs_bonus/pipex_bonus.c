@@ -106,17 +106,17 @@ int	main(int argc, char *argv[], char **envp)
 	int	outfile;
 	int	i;
 
+	i = 2;
 	if (argc >= 5)
 	{
 		if (ft_strncmp(argv[1], "here_doc", 8) == 0)
 		{
-			i = 3;
+			i++;
 			open_heredoc(&outfile, argv[argc - 1]);
 			here_doc(argv[2]);
 		}
 		else
 		{
-			i = 2;
 			ft_openfiles(&infile, &outfile, argc, argv);
 			ft_dup(infile, STDIN_FILENO);
 		}
