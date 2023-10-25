@@ -30,6 +30,7 @@
 int		ft_openfile(char *filename, int num);
 void	ft_exec(char **env, char *cmd);
 void	ft_outfile(int outfile, char **envp, char **argv, int i);
+void	ft_sanitize(char *cmd);
 
 /* env functions */
 void	ft_free(char **s);

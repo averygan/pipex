@@ -12,6 +12,29 @@
 
 #include "pipex_bonus.h"
 
+// Function to sanitize escape within quotes in cmd
+void	ft_sanitize(char *cmd)
+{
+	int	i;
+	int	in_quote;
+
+	i = 0;
+	in_quote = 0;
+	while (cmd[i])
+	{
+		if ((cmd[i] == '\"' || cmd[i] == '\'') && in_quote == 0)
+			in_quote = 1;
+		else if (cmd[i] == '\\' && in_quote == 1)
+		{
+			ft_memmove(&cmd[i], &cmd[i + 1], ft_strlen(cmd) - i);
+			i++;
+		}
+		else if ((cmd[i] == '\"' || cmd[i] == '\'') && in_quote == 1)
+			in_quote = 0;
+		i++;
+	}
+}
+
 // Call env functions and exec
 void	ft_exec(char **env, char *cmd)
 {
@@ -19,6 +42,7 @@ void	ft_exec(char **env, char *cmd)
 	char	**args;
 	char	*path;
 
+	ft_sanitize(cmd);
 	allpath = ft_getenv(env);
 	args = arr_split(cmd, ' ');
 	path = ft_getpath(allpath, args[0]);

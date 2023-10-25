@@ -90,6 +90,7 @@ void	here_doc(char *limiter)
 	}
 }
 
+// Function to create pipe, fork process, open infile and exec cmd1
 void	ft_infile(char **argv, char **env)
 {
 	int	pipes[2];

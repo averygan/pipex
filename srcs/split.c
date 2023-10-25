@@ -86,7 +86,7 @@ char	**arr_split(char *s, char c)
 
 // int	main(void)
 // {
-// 	char *s = "./script.sh";
+// 	char *s = "awk '{count++} END {print count}'";
 // 	char **words;
 
 // 	words = arr_split(s, ' ');
