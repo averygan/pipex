@@ -52,17 +52,19 @@ void	ft_redirect(int *in, int *out)
 }
 
 // Open files and check for errors
-int	ft_openfiles(char **argv, int num)
+int	ft_openfiles(char *filename, int num)
 {
 	int	fd;
 
 	if (num == 0)
-		fd = open(argv[1], O_RDONLY);
+		fd = open(filename, O_RDONLY);
 	if (num == 1)
-		fd = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 	{
-		ft_putstr_fd("pipex: line 1: input: No such file or directory\n", 2);
+		ft_putstr_fd("pipex: line 1: ", 2);
+		ft_putstr_fd(filename, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		exit(errno);
 	}
 	return (fd);

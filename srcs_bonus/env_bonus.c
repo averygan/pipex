@@ -58,8 +58,8 @@ char	*ft_getpath(char **allpath, char *cmd)
 	char	*tmp_path;
 	char	*path;
 
-	i = 0;
-	while (allpath[i])
+	i = -1;
+	while (allpath[++i])
 	{
 		tmp_path = ft_strjoin(allpath[i], "/");
 		path = ft_strjoin(tmp_path, cmd);
@@ -71,7 +71,6 @@ char	*ft_getpath(char **allpath, char *cmd)
 			return (path);
 		}
 		free(path);
-		i++;
 	}
 	ft_free(allpath);
 	return (cmd);

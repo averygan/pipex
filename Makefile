@@ -13,7 +13,7 @@
 NAME	= pipex
 SRCS	= srcs/pipex.c srcs/utils.c srcs/split.c srcs/env.c
 SRCS_BONUS = srcs_bonus/pipex_bonus.c srcs_bonus/utils_bonus.c srcs_bonus/split_bonus.c \
-				srcs_bonus/env_bonus.c srcs_bonus/get_next_line_bonus.c
+				srcs_bonus/env_bonus.c srcs_bonus/get_next_line_bonus.c srcs_bonus/errors_bonus.c
 OBJS 	= ${SRCS:.c=.o}
 OBJS_BONUS = ${SRCS_BONUS:.c=.o}
 CC 		= gcc

@@ -27,9 +27,9 @@
 # endif
 
 /* utils functions */
-int		ft_openfiles(int *infile, int *outfile, int argc, char **argv);
-int		open_heredoc(int *outfile, char *filename);
+int		ft_openfile(char *filename, int num);
 void	ft_exec(char **env, char *cmd);
+void	ft_outfile(int outfile, char **envp, char **argv, int i);
 
 /* env functions */
 void	ft_free(char **s);

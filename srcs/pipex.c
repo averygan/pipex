@@ -35,7 +35,7 @@ void	child_process(char **argv, int *pipes, char **env)
 	int	fd;
 
 	close(pipes[0]);
-	fd = ft_openfiles(argv, 0);
+	fd = ft_openfiles(argv[1], 0);
 	ft_redirect(&fd, &pipes[1]);
 	close(pipes[1]);
 	ft_exec(env, argv[2]);
@@ -48,7 +48,7 @@ void	parent_process(char **argv, int *pipes, char **env)
 	int	outfd;
 
 	close(pipes[1]);
-	outfd = ft_openfiles(argv, 1);
+	outfd = ft_openfiles(argv[4], 1);
 	ft_redirect(&pipes[0], &outfd);
 	close(pipes[0]);
 	ft_exec(env, argv[3]);

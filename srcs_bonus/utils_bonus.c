@@ -12,13 +12,6 @@
 
 #include "pipex_bonus.h"
 
-// dup2 helper function for error handling
-void	ft_dup(int to, int from)
-{
-	if (dup2(to, from) < 0)
-		ft_error(3, NULL);
-}
-
 // Call env functions and exec
 void	ft_exec(char **env, char *cmd)
 {
@@ -36,68 +29,30 @@ void	ft_exec(char **env, char *cmd)
 	exit(127);
 }
 
-// Error handling for:
-// Command not found, pipe, fork, redirection and invalid args error
-void	ft_error(int num, char *cmd)
+// Function to open outfile, infile and heredoc outfile
+int	ft_openfile(char *filename, int num)
 {
+	int	fd;
+
 	if (num == 0)
-	{
-		ft_putstr_fd("pipex: line 1: ", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": command not found\n", 2);
-		exit(127);
-	}
+		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (num == 1)
-	{
-		ft_putstr_fd("error: unable to pipe\n", 2);
-		exit(127);
-	}
+		fd = open(filename, O_RDONLY);
 	if (num == 2)
-	{
-		ft_putstr_fd("error: unable to fork\n", 2);
-		exit(127);
-	}
-	if (num == 3)
-	{
-		ft_putstr_fd("error: pipes redirection\n", 2);
-		exit(9);
-	}
-	if (num == 4)
-		ft_putstr_fd("invalid arg: ./pipex file1 cmd1 cmd2 ... cmdn file2\n", 2);
-}
-
-// Open files and check for errors
-int	ft_openfiles(int *infile, int *outfile, int argc, char **argv)
-{
-	*infile = open(argv[1], O_RDONLY);
-	if (*infile < 0)
-	{
-		ft_putstr_fd("pipex: line 1: ", 2);
-		ft_putstr_fd(argv[1], 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-		exit(errno);
-	}
-	*outfile = open(argv[argc - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (*outfile < 0)
-	{
-		ft_putstr_fd("pipex: line 1: ", 2);
-		ft_putstr_fd(argv[argc - 1], 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-		exit(errno);
-	}
-	return (0);
-}
-
-// Opens here_doc file and check for errors
-int	open_heredoc(int *outfile, char *filename)
-{
-	*outfile = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if (*outfile < 0)
+		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (fd < 0)
 	{
 		ft_putstr_fd("pipex: line 1: ", 2);
 		ft_putstr_fd(filename, 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
 		exit(errno);
 	}
-	return (0);
+	return (fd);
+}
+
+// Helper function for main process
+void	ft_outfile(int outfile, char **envp, char **argv, int i)
+{
+	ft_dup(outfile, STDOUT_FILENO);
+	ft_exec(envp, argv[i]);
 }

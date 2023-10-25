@@ -86,43 +86,61 @@ void	here_doc(char *limiter)
 	{
 		close(pipes[1]);
 		ft_dup(pipes[0], STDIN_FILENO);
-		waitpid(pid, NULL, 0);
 		close(pipes[0]);
 	}
 }
 
-// Helper function for main process
-void	parent_handler(int outfile, char **envp, char **argv, int i)
+void	ft_infile(char **argv, char **env)
 {
-	ft_dup(outfile, STDOUT_FILENO);
-	ft_exec(envp, argv[i]);
+	int	pipes[2];
+	int	pid;
+	int	infile;
+
+	if (pipe(pipes) < 0)
+		ft_error(1, NULL);
+	pid = fork();
+	if (pid < 0)
+		ft_error(2, NULL);
+	if (!pid)
+	{
+		close(pipes[0]);
+		infile = ft_openfile(argv[1], 1);
+		ft_dup(infile, STDIN_FILENO);
+		ft_dup(pipes[1], STDOUT_FILENO);
+		ft_exec(env, argv[2]);
+		close(pipes[1]);
+	}
+	else
+	{
+		close(pipes[1]);
+		ft_dup(pipes[0], STDIN_FILENO);
+		close(pipes[0]);
+	}
 }
 
 // Main function checks for argument
 // Checks if here_doc or infile
 int	main(int argc, char *argv[], char **envp)
 {
-	int	infile;
-	int	outfile;
 	int	i;
+	int	outfile;
 
-	i = 2;
+	i = 3;
 	if (argc >= 5)
 	{
 		if (ft_strncmp(argv[1], "here_doc", 8) == 0)
 		{
-			i++;
-			open_heredoc(&outfile, argv[argc - 1]);
+			outfile = ft_openfile(argv[argc - 1], 2);
 			here_doc(argv[2]);
 		}
 		else
 		{
-			ft_openfiles(&infile, &outfile, argc, argv);
-			ft_dup(infile, STDIN_FILENO);
+			ft_infile(argv, envp);
+			outfile = ft_openfile(argv[argc - 1], 0);
 		}
 		while (i < argc - 2)
 			pipe_handler(argv[i++], envp);
-		parent_handler(outfile, envp, argv, i);
+		ft_outfile(outfile, envp, argv, i);
 	}
 	else
 		ft_error(4, NULL);

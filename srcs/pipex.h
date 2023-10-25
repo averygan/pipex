@@ -25,7 +25,7 @@
 /* utils */
 void	ft_error(int num, char *cmd);
 void	ft_redirect(int *in, int *out);
-int		ft_openfiles(char **argv, int num);
+int		ft_openfiles(char *filename, int num);
 
 /* env functions */
 void	ft_free(char **s);
